@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы</title>
+</head>
+<body>
+<a href="/admin">Вернуться в личный кабинет</a>
+<br>
+<h1>Заказы</h1>
+
+<form th:method="POST" th:action="@{/admin/orders/search}">
+  <fieldset>
+    <label for="search">Поиск по последним четырем символам</label>
+    <input id="search" name="search" th:value="*{value_search}" type=search">
+    <br>
+    <input type="submit" value="Найти">
+  </fieldset>
+</form>
+<h3>Результат: </h3>
+    <div th:each="order : ${search_order}">
+        <h5 th:text="'Заказ № ' + ${order.getNumber()}"></h5>
+        <img
+                th:src="'/img/' + ${order.getProduct().imageList[0].getFileName()}"
+                width="300px"
+        />
+        <br>
+        <br>
+        <img
+                th:src="'/img/' + ${order.getProduct().imageList[0].getFileName()}"
+                width="300px"
+        />
+        <p th:text="'Наименование: ' + ${order.getProduct().getTitle()}"></p>
+        <p th:text="'Количество: ' + ${order.getCount()}"></p>
+        <p th:text="'Цена: ' + ${order.getPrice()}"></p>
+        <p
+                th:text="'Дата заказа: ' + ${#temporals.format(order.getDateTime(), 'dd-MMM-yyyy')}"
+        ></p>
+        <p th:text="'Статус: ' + ${order.getStatus()}"></p>
+        <a th:href="@{/admin/editOrder/edit/{id}(id=${order.getId()})}"
+        >Изменить статус заказа</a
+        >
+        <a th:href="@{/admin/order/delete/{id}(id=${order.getId()})}"
+        >Удалить заказ</a>
+    </div>
+    <hr>
+
+</body>
+</html>
